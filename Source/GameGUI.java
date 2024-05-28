@@ -1,0 +1,3 @@
+/*
+Class responsible for the UI
+ */
