@@ -1,3 +1,0 @@
-/*
-Class responsible for managing the snake functionalities
- */
