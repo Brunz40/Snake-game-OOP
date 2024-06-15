@@ -8,23 +8,23 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import java.util.ArrayList;
 import java.util.List;
 public class Snake {
-    int size;
-    int width;
-    float baseSpeed;
-    List<Float> xBodyPosition;
-    List<Float> yBodyPosition;
-    List<Character> pointingDirection;
+    protected int size;
+    protected int width;
+    protected float baseSpeed;
+    protected List<Float> xBodyPosition;
+    protected List<Float> yBodyPosition;
+    protected List<Character> pointingDirection;
 
-    public Snake(float x, float y, float speed) {
-        this.xBodyPosition = new ArrayList<>();
+    public Snake(float x, float y, float speed, int cellsize) {
+        xBodyPosition = new ArrayList<>();
         xBodyPosition.add(x);
-        this.yBodyPosition = new ArrayList<>();
+        yBodyPosition = new ArrayList<>();
         yBodyPosition.add(y);
-        this.pointingDirection = new ArrayList<>();
+        pointingDirection = new ArrayList<>();
         pointingDirection.add('u');
-        this.size = 2;
-        this.width = 10;
-        this.baseSpeed = speed;
+        size = 1;
+        width = cellsize;
+        baseSpeed = speed;
     }
 
     public void handleInput() {
@@ -53,15 +53,27 @@ public class Snake {
             switch (pointingDirection.get(i)) {
                 case 'u':
                     yBodyPosition.set(i, yBodyPosition.get(i) + deltaSpeed);
+                    if(yBodyPosition.get(i) > Gdx.graphics.getHeight()){
+                        yBodyPosition.set(i, (float) 0);
+                    }
                     break;
                 case 'l':
                     xBodyPosition.set(i, xBodyPosition.get(i) - deltaSpeed);
+                    if(xBodyPosition.get(i) < 0){
+                        xBodyPosition.set(i, (float) Gdx.graphics.getWidth());
+                    }
                     break;
                 case 'r':
                     xBodyPosition.set(i, xBodyPosition.get(i) + deltaSpeed);
+                    if(xBodyPosition.get(i) > Gdx.graphics.getWidth()){
+                        xBodyPosition.set(i, (float) 0);
+                    }
                     break;
                 case 'd':
                     yBodyPosition.set(i, yBodyPosition.get(i) - deltaSpeed);
+                    if(yBodyPosition.get(i) < 0){
+                        yBodyPosition.set(i, (float) Gdx.graphics.getHeight());
+                    }
                     break;
                 default:
             }
