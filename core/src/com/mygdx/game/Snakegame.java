@@ -13,7 +13,9 @@ public class Snakegame extends ApplicationAdapter {
     public void create () {
         randomGenerator = new Random();
         renderer = new ShapeRenderer();
-        player = new Snake(randomGenerator.nextInt(Gdx.graphics.getWidth()), randomGenerator.nextInt(Gdx.graphics.getHeight()), 10);
+        player = new Snake(randomGenerator.nextInt(Gdx.graphics.getWidth()),
+                randomGenerator.nextInt(Gdx.graphics.getHeight()),
+                50);
     }
 
     public void render () {

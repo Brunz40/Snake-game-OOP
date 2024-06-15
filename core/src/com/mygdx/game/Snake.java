@@ -22,7 +22,7 @@ public class Snake {
         yBodyPosition.add(y);
         this.pointingDirection = new ArrayList<>();
         pointingDirection.add('u');
-        this.size = 1;
+        this.size = 2;
         this.width = 10;
         this.baseSpeed = speed;
     }
@@ -41,7 +41,7 @@ public class Snake {
                 pointingDirection.set(0, 'u');
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            if(!pointingDirection.get(0).equals('r'))
+            if(!pointingDirection.get(0).equals('u'))
                 pointingDirection.set(0, 'd');
         }
     }
@@ -64,15 +64,20 @@ public class Snake {
                     yBodyPosition.set(i, yBodyPosition.get(i) - deltaSpeed);
                     break;
                 default:
-
             }
+        }
+        for (int i=1; i<yBodyPosition.size(); i++) {
+            pointingDirection.set(i, pointingDirection.get(i-1));
         }
     }
 
     public void render(ShapeRenderer renderer) {
         renderer.setColor(Color.GREEN);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.circle(xBodyPosition.get(0), yBodyPosition.get(0), width);
+        for (int i = 0; i < xBodyPosition.size(); i++) {
+            renderer.circle(xBodyPosition.get(i), yBodyPosition.get(i), width);
+        }
+
         renderer.end();
     }
 }
