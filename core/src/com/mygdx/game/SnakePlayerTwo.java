@@ -32,10 +32,9 @@ public class SnakePlayerTwo extends Snake {
     public void render(ShapeRenderer renderer) {
         renderer.setColor(Color.BLUE);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
-        for (int i = 0; i < xBodyPosition.size(); i++) {
-            renderer.circle(xBodyPosition.get(i), yBodyPosition.get(i), width);
+        for (int i = 0; i < bodysegments.size(); i++) {
+            renderer.circle(bodysegments.get(i).x, bodysegments.get(i).y, bodysegments.get(i).radius);
         }
-
         renderer.end();
     }
 }

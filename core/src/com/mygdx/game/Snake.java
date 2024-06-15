@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,21 +12,20 @@ public class Snake {
     protected int size;
     protected int width;
     protected float baseSpeed;
-    protected List<Float> xBodyPosition;
-    protected List<Float> yBodyPosition;
+    protected List<Circle> bodysegments;
     protected List<Character> pointingDirection;
 
     public Snake(float x, float y, float speed, int cellsize) {
-        xBodyPosition = new ArrayList<>();
-        xBodyPosition.add(x);
-        yBodyPosition = new ArrayList<>();
-        yBodyPosition.add(y);
-        pointingDirection = new ArrayList<>();
-        pointingDirection.add('u');
         size = 1;
         width = cellsize;
         baseSpeed = speed;
+        bodysegments = new ArrayList<>();
+        bodysegments.add(new Circle(x, y, width));
+        pointingDirection = new ArrayList<>();
+        pointingDirection.add('u');
     }
+
+
 
     public void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
@@ -49,36 +49,36 @@ public class Snake {
     public void update() {
         float deltaSpeed = Gdx.graphics.getDeltaTime()*baseSpeed;
         handleInput();
-        for (int i = 0; i < xBodyPosition.size(); i++) {
+        for (int i = 0; i < bodysegments.size(); i++) {
             switch (pointingDirection.get(i)) {
                 case 'u':
-                    yBodyPosition.set(i, yBodyPosition.get(i) + deltaSpeed);
-                    if(yBodyPosition.get(i) > Gdx.graphics.getHeight()){
-                        yBodyPosition.set(i, (float) 0);
+                    bodysegments.get(i).setY(bodysegments.get(i).y + deltaSpeed);
+                    if(bodysegments.get(i).y > Gdx.graphics.getHeight()){
+                        bodysegments.get(i).setY(0);
                     }
                     break;
                 case 'l':
-                    xBodyPosition.set(i, xBodyPosition.get(i) - deltaSpeed);
-                    if(xBodyPosition.get(i) < 0){
-                        xBodyPosition.set(i, (float) Gdx.graphics.getWidth());
+                    bodysegments.get(i).setX(bodysegments.get(i).x - deltaSpeed);
+                    if(bodysegments.get(i).x  < 0){
+                        bodysegments.get(i).setX(Gdx.graphics.getWidth());
                     }
                     break;
                 case 'r':
-                    xBodyPosition.set(i, xBodyPosition.get(i) + deltaSpeed);
-                    if(xBodyPosition.get(i) > Gdx.graphics.getWidth()){
-                        xBodyPosition.set(i, (float) 0);
+                    bodysegments.get(i).setX(bodysegments.get(i).x + deltaSpeed);
+                    if(bodysegments.get(i).x  > Gdx.graphics.getWidth()){
+                        bodysegments.get(i).setX(0);
                     }
                     break;
                 case 'd':
-                    yBodyPosition.set(i, yBodyPosition.get(i) - deltaSpeed);
-                    if(yBodyPosition.get(i) < 0){
-                        yBodyPosition.set(i, (float) Gdx.graphics.getHeight());
+                    bodysegments.get(i).setY(bodysegments.get(i).y - deltaSpeed);
+                    if(bodysegments.get(i).y  < 0){
+                        bodysegments.get(i).setY(Gdx.graphics.getHeight());
                     }
                     break;
                 default:
             }
         }
-        for (int i=1; i<yBodyPosition.size(); i++) {
+        for (int i=1; i<bodysegments.size(); i++) {
             pointingDirection.set(i, pointingDirection.get(i-1));
         }
     }
@@ -86,10 +86,9 @@ public class Snake {
     public void render(ShapeRenderer renderer) {
         renderer.setColor(Color.GREEN);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
-        for (int i = 0; i < xBodyPosition.size(); i++) {
-            renderer.circle(xBodyPosition.get(i), yBodyPosition.get(i), width);
+        for (int i = 0; i < bodysegments.size(); i++) {
+            renderer.circle(bodysegments.get(i).x, bodysegments.get(i).y, bodysegments.get(i).radius);
         }
-
         renderer.end();
     }
 }
