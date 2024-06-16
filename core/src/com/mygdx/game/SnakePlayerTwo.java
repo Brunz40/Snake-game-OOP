@@ -12,19 +12,19 @@ public class SnakePlayerTwo extends Snake {
 
     public void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
-            if(!pointingDirection.get(0).equals('r'))
+            if (!pointingDirection.get(0).equals('r'))
                 pointingDirection.set(0, 'l');
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-            if(!pointingDirection.get(0).equals('l'))
+            if (!pointingDirection.get(0).equals('l'))
                 pointingDirection.set(0, 'r');
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            if(!pointingDirection.get(0).equals('d'))
+            if (!pointingDirection.get(0).equals('d'))
                 pointingDirection.set(0, 'u');
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-            if(!pointingDirection.get(0).equals('u'))
+            if (!pointingDirection.get(0).equals('u'))
                 pointingDirection.set(0, 'd');
         }
     }
@@ -33,7 +33,8 @@ public class SnakePlayerTwo extends Snake {
         renderer.setColor(Color.BLUE);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         for (int i = 0; i < bodysegments.size(); i++) {
-            renderer.circle(bodysegments.get(i).x, bodysegments.get(i).y, bodysegments.get(i).radius);
+            renderer.rect(bodysegments.get(i).x, bodysegments.get(i).y, bodysegments.get(i).width,
+                    bodysegments.get(i).height);
         }
         renderer.end();
     }
