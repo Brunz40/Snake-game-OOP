@@ -4,8 +4,9 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.util.Random;
@@ -16,19 +17,22 @@ public class Snakegame extends ApplicationAdapter {
     private SnakePlayerTwo playerTwo;
     private Fruit fruit;
     private Random randomGenerator;
-    private int cellsize = 20;
+    private final int cellsize = 10;
     private float timeElapsed;
-    private final float SPEED_INCREMENT_INTERVAL = 10f; // Intervalo para aumentar a velocidade
-    private final float SPEED_INCREMENT = 1f; // Incremento de velocidade
+    private final float SPEED_INCREMENT_INTERVAL = 10f;
+    private final float SPEED_INCREMENT = 1f;
     private boolean gameOver;
     private Music backgroundMusic;
     private Sound eatSound;
+    public int scorePlayer1;
+    public int scorePlayer2;
+    SpriteBatch batch;
+    BitmapFont font;
 
     @Override
     public void create() {
         renderer = new ShapeRenderer();
         randomGenerator = new Random();
-        renderer = new ShapeRenderer();
         player = new Snake(randomGenerator.nextInt(Gdx.graphics.getWidth()),
                 randomGenerator.nextInt(Gdx.graphics.getHeight()),
                 4 * cellsize, cellsize);
@@ -38,7 +42,8 @@ public class Snakegame extends ApplicationAdapter {
         eatSound = Gdx.audio.newSound(Gdx.files.internal("eat_fruit.mp3"));
         fruit = new Fruit(randomGenerator.nextInt(Gdx.graphics.getWidth()),
                 randomGenerator.nextInt(Gdx.graphics.getHeight()), cellsize * 1.2f, eatSound); // Fruta um pouco maior
-                                                                                               // que os segmentos
+        scorePlayer1=0;
+        scorePlayer2=0;
         timeElapsed = 0;
         gameOver = false;
 
@@ -46,6 +51,9 @@ public class Snakegame extends ApplicationAdapter {
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sound_game.mp3"));
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
+
+        batch = new SpriteBatch();
+        font = new BitmapFont();
     }
 
     @Override
@@ -90,36 +98,33 @@ public class Snakegame extends ApplicationAdapter {
         }
 
         if (fruit.isEaten(player)) {
+            scorePlayer1++;
             player.grow();
             fruit.reposition(randomGenerator.nextInt(Gdx.graphics.getWidth()),
                     randomGenerator.nextInt(Gdx.graphics.getHeight()));
-        }
-
-        if (fruit.isEaten(playerTwo)) {
+        }else if (fruit.isEaten(playerTwo)) {
+            scorePlayer2++;
             playerTwo.grow();
             fruit.reposition(randomGenerator.nextInt(Gdx.graphics.getWidth()),
                     randomGenerator.nextInt(Gdx.graphics.getHeight()));
         }
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.begin();
+        font.draw(batch, "Player one Score: " + scorePlayer1, 10, Gdx.graphics.getHeight() - 10);
+        font.draw(batch, "Player two Score: " + scorePlayer2, Gdx.graphics.getWidth()-135, Gdx.graphics.getHeight() - 10);
+        batch.end();
         player.render(renderer);
         playerTwo.render(renderer);
         fruit.render(renderer);
     }
 
     @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-        float newCellSize = Math.min(width, height) / 50f; // Ajuste conforme necessário
-        player.resize(newCellSize / 2);
-        playerTwo.resize(newCellSize / 2);
-        fruit.resize(newCellSize * 0.8f); // Fruta um pouco maior que os segmentos
-    }
-
-    @Override
     public void dispose() {
         renderer.dispose();
-        backgroundMusic.dispose(); // Liberar os recursos da música
-        eatSound.dispose(); // Liberar os recursos do som
+        backgroundMusic.dispose();
+        eatSound.dispose();
+        font.dispose();
+        batch.dispose();
     }
 }
