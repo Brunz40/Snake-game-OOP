@@ -20,6 +20,9 @@ public class Snakegame extends ApplicationAdapter {
     private float timeElapsed;
     private final float SPEED_INCREMENT_INTERVAL = 10f; // Intervalo para aumentar a velocidade
     private final float SPEED_INCREMENT = 1f; // Incremento de velocidade
+    private boolean gameOver;
+    private Music backgroundMusic;
+    private Sound eatSound;
 
     @Override
     public void create() {
@@ -32,14 +35,25 @@ public class Snakegame extends ApplicationAdapter {
         playerTwo = new SnakePlayerTwo(randomGenerator.nextInt(Gdx.graphics.getWidth()),
                 randomGenerator.nextInt(Gdx.graphics.getHeight()),
                 4 * cellsize, cellsize); // Velocidade inicial reduzida
+        eatSound = Gdx.audio.newSound(Gdx.files.internal("eat_fruit.mp3"));
         fruit = new Fruit(randomGenerator.nextInt(Gdx.graphics.getWidth()),
-                randomGenerator.nextInt(Gdx.graphics.getHeight()), cellsize * 1.2f); // Fruta um pouco maior que os
-                                                                                     // segmentos
+                randomGenerator.nextInt(Gdx.graphics.getHeight()), cellsize * 1.2f, eatSound); // Fruta um pouco maior
+                                                                                               // que os segmentos
         timeElapsed = 0;
+        gameOver = false;
+
+        // Carregar e tocar a música de fundo
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sound_game.mp3"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.play();
     }
 
     @Override
     public void render() {
+        if (gameOver) {
+            return; // Se o jogo acabou, não faz mais nada
+        }
+
         float deltaTime = Gdx.graphics.getDeltaTime();
         timeElapsed += deltaTime;
 
@@ -51,6 +65,29 @@ public class Snakegame extends ApplicationAdapter {
 
         player.update();
         playerTwo.update();
+
+        boolean playerHitPlayerTwo = player.checkHeadCollisionWithOtherSnake(playerTwo);
+        boolean playerTwoHitPlayer = playerTwo.checkHeadCollisionWithOtherSnake(player);
+
+        if (playerHitPlayerTwo && playerTwoHitPlayer) {
+            player.alive = false;
+            playerTwo.alive = false;
+            gameOver = true;
+            System.out.println("Oh no, you both lost");
+        } else if (playerHitPlayerTwo) {
+            player.alive = false;
+            gameOver = true;
+            System.out.println("Blue win !");
+        } else if (playerTwoHitPlayer) {
+            playerTwo.alive = false;
+            gameOver = true;
+            System.out.println("Green win !");
+        }
+
+        if (gameOver) {
+            backgroundMusic.stop();
+            Gdx.app.exit();
+        }
 
         if (fruit.isEaten(player)) {
             player.grow();
@@ -82,5 +119,7 @@ public class Snakegame extends ApplicationAdapter {
     @Override
     public void dispose() {
         renderer.dispose();
+        backgroundMusic.dispose(); // Liberar os recursos da música
+        eatSound.dispose(); // Liberar os recursos do som
     }
 }

@@ -17,6 +17,7 @@ public class Snake {
     protected List<Rectangle> bodysegments;
     protected List<Character> pointingDirection;
     private final int GROWTH_DISTANCE = 60; // Aumentando a distância para a nova célula
+    public boolean alive;
 
     public Snake(float x, float y, float speed, float cellsize) {
         this.size = 1; // Tamanho inicial da cobra
@@ -25,6 +26,7 @@ public class Snake {
         this.currentSpeed = baseSpeed;
         this.bodysegments = new ArrayList<>();
         this.pointingDirection = new ArrayList<>();
+        this.alive = true;
 
         // Adicionando a cabeça da cobra
         this.bodysegments.add(new Rectangle(x, y, width, width));
@@ -51,6 +53,9 @@ public class Snake {
     }
 
     public void update() {
+        if (!alive)
+            return;
+
         float deltaSpeed = Gdx.graphics.getDeltaTime() * currentSpeed;
         handleInput();
 
@@ -99,6 +104,9 @@ public class Snake {
     }
 
     public void render(ShapeRenderer renderer) {
+        if (!alive)
+            return;
+
         renderer.setColor(Color.GREEN);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         for (int i = 0; i < bodysegments.size(); i++) {
@@ -146,5 +154,26 @@ public class Snake {
 
     public void increaseSpeed(float increment) {
         this.currentSpeed += increment;
+    }
+
+    public boolean checkCollisionWithOtherSnake(Snake other) {
+        for (Rectangle segment : bodysegments) {
+            for (Rectangle otherSegment : other.getBodySegments()) {
+                if (segment.overlaps(otherSegment)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean checkHeadCollisionWithOtherSnake(Snake other) {
+        Rectangle head = bodysegments.get(0);
+        for (int i = 1; i < other.getBodySegments().size(); i++) {
+            if (head.overlaps(other.getBodySegments().get(i))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

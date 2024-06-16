@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
@@ -8,10 +9,12 @@ import com.badlogic.gdx.math.Rectangle;
 public class Fruit {
     private Circle fruit;
     private float size;
+    private Sound eatSound;
 
-    public Fruit(float x, float y, float size) {
+    public Fruit(float x, float y, float size, Sound eatSound) {
         this.size = size;
         this.fruit = new Circle(x, y, size);
+        this.eatSound = eatSound;
     }
 
     public void render(ShapeRenderer renderer) {
@@ -24,6 +27,7 @@ public class Fruit {
     public boolean isEaten(Snake snake) {
         for (Rectangle segment : snake.getBodySegments()) {
             if (circleIntersectsRectangle(fruit, segment)) {
+                eatSound.play();
                 return true;
             }
         }
