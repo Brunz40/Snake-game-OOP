@@ -5,6 +5,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+/**
+ * Class responsible for the player two, mostly equal to the player one snake
+ */
 public class SnakePlayerTwo extends Snake {
     public SnakePlayerTwo(float x, float y, float speed, int cellSize) {
         super(x, y, speed, cellSize);

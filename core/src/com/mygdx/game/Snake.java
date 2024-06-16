@@ -9,6 +9,9 @@ import com.badlogic.gdx.math.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class responsible for the snake
+ */
 public class Snake {
     protected int size;
     protected float width;
@@ -16,21 +19,30 @@ public class Snake {
     protected float currentSpeed;
     protected List<Rectangle> bodysegments;
     protected List<Character> pointingDirection;
-    private final int GROWTH_DISTANCE = 60; // Aumentando a distância para a nova célula
+    private final int GROWTH_DISTANCE = 60;
 
+    /**
+     * metod responsible for creating the snake
+     * @param x initial x coordinate
+     * @param y initial y coordinate
+     * @param speed initial speed
+     * @param cellsize body segment size, which should be the same as the cell size
+     */
     public Snake(float x, float y, float speed, float cellsize) {
-        this.size = 1; // Tamanho inicial da cobra
-        this.width = cellsize; // Diminuindo o tamanho das bolinhas
+        this.size = 1;
+        this.width = cellsize;
         this.baseSpeed = speed;
         this.currentSpeed = baseSpeed;
         this.bodysegments = new ArrayList<>();
         this.pointingDirection = new ArrayList<>();
-
-        // Adicionando a cabeça da cobra
         this.bodysegments.add(new Rectangle(x, y, width, width));
         this.pointingDirection.add('u');
     }
 
+    /**
+     * method responsible for handling input, checking if the new direction is feasible
+     * and changing the head pointing direction accordingly
+     */
     public void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
             if (!pointingDirection.get(0).equals('r'))
@@ -50,6 +62,10 @@ public class Snake {
         }
     }
 
+    /**
+     * method responsible for updating the snake state,
+     * will move every body segment and update its pointing direction accordingly
+     */
     public void update() {
         float deltaSpeed = Gdx.graphics.getDeltaTime() * currentSpeed;
         handleInput();
@@ -98,6 +114,11 @@ public class Snake {
         }
     }
 
+    /**
+     * method responsible for rendering the snake at the screen,
+     * will address each body segment separatedly
+     * @param renderer rendering unit responsible for output the snake drawing
+     */
     public void render(ShapeRenderer renderer) {
         renderer.setColor(Color.GREEN);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -108,10 +129,17 @@ public class Snake {
         renderer.end();
     }
 
+    /**
+     * @return the list containing the snakes body segments
+     */
     public List<Rectangle> getBodySegments() {
         return bodysegments;
     }
 
+    /**
+     * method responsible for adding new body segments to the snake,
+     * asserting they are at the end of the body and point to the right direction
+     */
     public void grow() {
         Rectangle lastSegment = bodysegments.get(bodysegments.size() - 1);
         char direction = pointingDirection.get(pointingDirection.size() - 1);
@@ -137,6 +165,10 @@ public class Snake {
         pointingDirection.add(direction);
     }
 
+    /**
+     * method responsible for setting a new size to the snake
+     * @param newWidth
+     */
     public void resize(float newWidth) {
         this.width = newWidth;
         for (Rectangle segment : bodysegments) {
@@ -144,6 +176,10 @@ public class Snake {
         }
     }
 
+    /**
+     * method responsible for changing the snake speed
+     * @param increment amount per wich the speed will change
+     */
     public void increaseSpeed(float increment) {
         this.currentSpeed += increment;
     }
