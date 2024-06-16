@@ -83,7 +83,5 @@ public class Fruit {
      * method responsible for altering the size of the fruit
      * @param newSize new value for the radius of the fruit
      */
-    public void resize(float newSize) {
-        this.fruit.setRadius(newSize);
-    }
+
 }

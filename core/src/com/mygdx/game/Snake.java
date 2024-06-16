@@ -125,9 +125,9 @@ public class Snake {
 
         renderer.setColor(Color.GREEN);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
-        for (int i = 0; i < bodysegments.size(); i++) {
-            renderer.rect(bodysegments.get(i).x, bodysegments.get(i).y, bodysegments.get(i).width,
-                    bodysegments.get(i).height);
+        for (Rectangle bodysegment : bodysegments) {
+            renderer.rect(bodysegment.x, bodysegment.y, bodysegment.width,
+                    bodysegment.height);
         }
         renderer.end();
     }
@@ -165,16 +165,7 @@ public class Snake {
         bodysegments.add(new Rectangle(newX, newY, width, width));
         pointingDirection.add(direction);
     }
-    /**
-     * method responsible for setting a new size to the snake
-     * @param newWidth new widht
-     */
-    public void resize(float newWidth) {
-        this.width = newWidth;
-        for (Rectangle segment : bodysegments) {
-            segment.setSize(newWidth, newWidth);
-        }
-    }
+
     /**
      * method responsible for changing the snake speed
      * @param increment amount per wich the speed will change
