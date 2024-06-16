@@ -2,9 +2,6 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -16,22 +13,21 @@ public class Snakegame extends ApplicationAdapter {
     private SnakePlayerTwo playerTwo;
     private Fruit fruit;
     private Random randomGenerator;
-    private int cellsize = 20;
+    private final int cellsize = 40;
     private float timeElapsed;
     private final float SPEED_INCREMENT_INTERVAL = 10f; // Intervalo para aumentar a velocidade
     private final float SPEED_INCREMENT = 1f; // Incremento de velocidade
 
     @Override
     public void create() {
-        renderer = new ShapeRenderer();
         randomGenerator = new Random();
         renderer = new ShapeRenderer();
         player = new Snake(randomGenerator.nextInt(Gdx.graphics.getWidth()),
                 randomGenerator.nextInt(Gdx.graphics.getHeight()),
-                4 * cellsize, cellsize);
+                1 * cellsize, cellsize);
         playerTwo = new SnakePlayerTwo(randomGenerator.nextInt(Gdx.graphics.getWidth()),
                 randomGenerator.nextInt(Gdx.graphics.getHeight()),
-                4 * cellsize, cellsize); // Velocidade inicial reduzida
+                1 * cellsize, cellsize); // Velocidade inicial reduzida
         fruit = new Fruit(randomGenerator.nextInt(Gdx.graphics.getWidth()),
                 randomGenerator.nextInt(Gdx.graphics.getHeight()), cellsize * 1.2f); // Fruta um pouco maior que os
                                                                                      // segmentos

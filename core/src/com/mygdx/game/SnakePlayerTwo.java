@@ -32,9 +32,9 @@ public class SnakePlayerTwo extends Snake {
     public void render(ShapeRenderer renderer) {
         renderer.setColor(Color.BLUE);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
-        for (int i = 0; i < bodysegments.size(); i++) {
-            renderer.rect(bodysegments.get(i).x, bodysegments.get(i).y, bodysegments.get(i).width,
-                    bodysegments.get(i).height);
+        for (com.badlogic.gdx.math.Rectangle bodysegment : bodysegments) {
+            renderer.rect(bodysegment.x, bodysegment.y, bodysegment.width,
+                    bodysegment.height);
         }
         renderer.end();
     }
