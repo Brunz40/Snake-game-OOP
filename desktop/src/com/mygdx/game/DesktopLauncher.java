@@ -9,6 +9,6 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(30);
 		config.setTitle("Snake Game OOP");
-		new Lwjgl3Application(new Snakegame(), config);
+		new Lwjgl3Application(new SnakeGame(), config);
 	}
 }

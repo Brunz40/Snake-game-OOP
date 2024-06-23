@@ -15,7 +15,7 @@ import java.util.Random;
  * Main class for the Snake game application.
  * This class handles the game setup, rendering, and main game loop.
  */
-public class Snakegame extends ApplicationAdapter {
+public class SnakeGame extends ApplicationAdapter {
     private ShapeRenderer renderer;
     private Snake player;
     private SnakePlayerTwo playerTwo;
@@ -49,7 +49,7 @@ public class Snakegame extends ApplicationAdapter {
                 4 * cellsize, cellsize);
         eatSound = Gdx.audio.newSound(Gdx.files.internal("eat_fruit.mp3"));
         fruit = new Fruit(randomGenerator.nextInt(Gdx.graphics.getWidth()),
-                randomGenerator.nextInt(Gdx.graphics.getHeight()), cellsize * 1.2f, eatSound); // Fruta um pouco maior
+                randomGenerator.nextInt(Gdx.graphics.getHeight()), cellsize, eatSound);
         scorePlayer1=0;
         scorePlayer2=0;
         timeElapsed = 0;
