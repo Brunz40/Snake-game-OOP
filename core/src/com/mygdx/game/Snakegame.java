@@ -11,6 +11,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.util.Random;
 
+/**
+ * Main class for the Snake game application.
+ * This class handles the game setup, rendering, and main game loop.
+ */
 public class Snakegame extends ApplicationAdapter {
     private ShapeRenderer renderer;
     private Snake player;
@@ -19,8 +23,8 @@ public class Snakegame extends ApplicationAdapter {
     private Random randomGenerator;
     private final int cellsize = 10;
     private float timeElapsed;
-    private final float SPEED_INCREMENT_INTERVAL = 10f;
-    private final float SPEED_INCREMENT = 1f;
+    private final float SPEED_INCREMENT_INTERVAL = 10f; // Interval for speed increase
+    private final float SPEED_INCREMENT = 1f; // Speed increment
     private boolean gameOver;
     private Music backgroundMusic;
     private Sound eatSound;
@@ -29,6 +33,10 @@ public class Snakegame extends ApplicationAdapter {
     SpriteBatch batch;
     BitmapFont font;
 
+    /**
+     * Called when the application is first created.
+     * Initializes the game objects and starts the background music.
+     */
     @Override
     public void create() {
         renderer = new ShapeRenderer();
@@ -38,7 +46,7 @@ public class Snakegame extends ApplicationAdapter {
                 4 * cellsize, cellsize);
         playerTwo = new SnakePlayerTwo(randomGenerator.nextInt(Gdx.graphics.getWidth()),
                 randomGenerator.nextInt(Gdx.graphics.getHeight()),
-                4 * cellsize, cellsize); // Velocidade inicial reduzida
+                4 * cellsize, cellsize);
         eatSound = Gdx.audio.newSound(Gdx.files.internal("eat_fruit.mp3"));
         fruit = new Fruit(randomGenerator.nextInt(Gdx.graphics.getWidth()),
                 randomGenerator.nextInt(Gdx.graphics.getHeight()), cellsize * 1.2f, eatSound); // Fruta um pouco maior
@@ -46,20 +54,22 @@ public class Snakegame extends ApplicationAdapter {
         scorePlayer2=0;
         timeElapsed = 0;
         gameOver = false;
-
-        // Carregar e tocar a música de fundo
+        // Load and play background music
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sound_game.mp3"));
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
-
         batch = new SpriteBatch();
         font = new BitmapFont();
     }
 
+    /**
+     * Called to update and render the game at each frame.
+     * Handles game logic, input, and rendering.
+     */
     @Override
     public void render() {
         if (gameOver) {
-            return; // Se o jogo acabou, não faz mais nada
+            return;
         }
 
         float deltaTime = Gdx.graphics.getDeltaTime();
@@ -68,7 +78,7 @@ public class Snakegame extends ApplicationAdapter {
         if (timeElapsed >= SPEED_INCREMENT_INTERVAL) {
             player.increaseSpeed(SPEED_INCREMENT);
             playerTwo.increaseSpeed(SPEED_INCREMENT);
-            timeElapsed = 0; // Reiniciar o contador de tempo
+            timeElapsed = 0;
         }
 
         player.update();
@@ -85,11 +95,11 @@ public class Snakegame extends ApplicationAdapter {
         } else if (playerHitPlayerTwo) {
             player.alive = false;
             gameOver = true;
-            System.out.println("Blue win !");
+            System.out.println("Blue win!");
         } else if (playerTwoHitPlayer) {
             playerTwo.alive = false;
             gameOver = true;
-            System.out.println("Green win !");
+            System.out.println("Green win!");
         }
 
         if (gameOver) {
