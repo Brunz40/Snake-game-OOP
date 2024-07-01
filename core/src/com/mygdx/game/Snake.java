@@ -12,13 +12,14 @@ import java.util.List;
  * Class responsible for the snake
  */
 public class Snake {
+    //snake characteristics
     protected int size;
     protected float width;
+    //movement related
     protected float baseSpeed;
     protected float currentSpeed;
     protected List<Rectangle> bodysegments;
     protected List<Character> pointingDirection;
-    private final int GROWTH_DISTANCE = 60;
     public boolean alive;
 
     /**
@@ -147,6 +148,8 @@ public class Snake {
         float newX = lastSegment.x;
         float newY = lastSegment.y;
 
+        //
+        int GROWTH_DISTANCE = 60;
         switch (direction) {
             case 'u':
                 newY -= (width + GROWTH_DISTANCE);
@@ -161,7 +164,6 @@ public class Snake {
                 newX -= (width + GROWTH_DISTANCE);
                 break;
         }
-
         bodysegments.add(new Rectangle(newX, newY, width, width));
         pointingDirection.add(direction);
     }

@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
- * Class responsible for the player two, mostly equal to the player one snake
+ * Class responsible for the player two, who inherits most it's methods from player one
  */
 public class SnakePlayerTwo extends Snake {
     public SnakePlayerTwo(float x, float y, float speed, int cellSize) {
@@ -35,9 +35,9 @@ public class SnakePlayerTwo extends Snake {
     public void render(ShapeRenderer renderer) {
         renderer.setColor(Color.BLUE);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
-        for (com.badlogic.gdx.math.Rectangle bodysegment : bodysegments) {
-            renderer.rect(bodysegment.x, bodysegment.y, bodysegment.width,
-                    bodysegment.height);
+        for (com.badlogic.gdx.math.Rectangle bodySegment : bodysegments) {
+            renderer.rect(bodySegment.x, bodySegment.y, bodySegment.width,
+                    bodySegment.height);
         }
         renderer.end();
     }

@@ -13,7 +13,6 @@ import com.badlogic.gdx.math.Rectangle;
 public class Fruit {
     private Circle fruit;
     private Sound eatSound;
-
     /**
      * constructor method responsible for creating the fruit
      * @param x fruit coordinate on the x-axis, must be between 0 and screen width
@@ -79,9 +78,4 @@ public class Fruit {
     public void reposition(float x, float y) {
         this.fruit.setPosition(x, y);
     }
-    /**
-     * method responsible for altering the size of the fruit
-     * @param newSize new value for the radius of the fruit
-     */
-
 }

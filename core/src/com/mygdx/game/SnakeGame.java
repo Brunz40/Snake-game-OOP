@@ -16,22 +16,25 @@ import java.util.Random;
  * This class handles the game setup, rendering, and main game loop.
  */
 public class SnakeGame extends ApplicationAdapter {
+    //visual utilities
     private ShapeRenderer renderer;
-    private Snake player;
-    private SnakePlayerTwo playerTwo;
-    private Fruit fruit;
-    private Random randomGenerator;
-    private final int cellsize = 10;
-    private float timeElapsed;
-    private final float SPEED_INCREMENT_INTERVAL = 10f; // Interval for speed increase
-    private final float SPEED_INCREMENT = 1f; // Speed increment
-    private boolean gameOver;
+    private SpriteBatch batch;
+    private BitmapFont font;
+    //sounds
     private Music backgroundMusic;
     private Sound eatSound;
+    //players
+    private Snake player;
+    private SnakePlayerTwo playerTwo;
+    //fruit
+    private Fruit fruit;
+    private Random randomGenerator;
+    //variables
+    private float timeElapsed;
+    private boolean gameOver;
     public int scorePlayer1;
     public int scorePlayer2;
-    SpriteBatch batch;
-    BitmapFont font;
+
 
     /**
      * Called when the application is first created.
@@ -41,6 +44,7 @@ public class SnakeGame extends ApplicationAdapter {
     public void create() {
         renderer = new ShapeRenderer();
         randomGenerator = new Random();
+        int cellsize = 10;
         player = new Snake(randomGenerator.nextInt(Gdx.graphics.getWidth()),
                 randomGenerator.nextInt(Gdx.graphics.getHeight()),
                 4 * cellsize, cellsize);
@@ -63,30 +67,31 @@ public class SnakeGame extends ApplicationAdapter {
     }
 
     /**
-     * Called to update and render the game at each frame.
-     * Handles game logic, input, and rendering.
+     * Called to update the game state, players score and position
      */
-    @Override
-    public void render() {
+    public void update(){
         if (gameOver) {
             return;
         }
-
+        //updating elapsed time
         float deltaTime = Gdx.graphics.getDeltaTime();
         timeElapsed += deltaTime;
-
+        //fixed values
+        // Interval for speed increase
+        float SPEED_INCREMENT_INTERVAL = 10f;
         if (timeElapsed >= SPEED_INCREMENT_INTERVAL) {
+            // Speed increment
+            float SPEED_INCREMENT = 1f;
             player.increaseSpeed(SPEED_INCREMENT);
             playerTwo.increaseSpeed(SPEED_INCREMENT);
             timeElapsed = 0;
         }
-
+        //update players
         player.update();
         playerTwo.update();
-
+        //check collision between players
         boolean playerHitPlayerTwo = player.checkHeadCollisionWithOtherSnake(playerTwo);
         boolean playerTwoHitPlayer = playerTwo.checkHeadCollisionWithOtherSnake(player);
-
         if (playerHitPlayerTwo && playerTwoHitPlayer) {
             player.alive = false;
             playerTwo.alive = false;
@@ -101,12 +106,11 @@ public class SnakeGame extends ApplicationAdapter {
             gameOver = true;
             System.out.println("Green win!");
         }
-
         if (gameOver) {
             backgroundMusic.stop();
             Gdx.app.exit();
         }
-
+        //check if the fruit was eaten
         if (fruit.isEaten(player)) {
             scorePlayer1++;
             player.grow();
@@ -118,7 +122,18 @@ public class SnakeGame extends ApplicationAdapter {
             fruit.reposition(randomGenerator.nextInt(Gdx.graphics.getWidth()),
                     randomGenerator.nextInt(Gdx.graphics.getHeight()));
         }
+    }
 
+    /**
+     * Called to update and render the game at each frame.
+     * Handles game logic, input, and rendering.
+     */
+    @Override
+    public void render() {
+        if (gameOver) {
+            return;
+        }
+        update();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         font.draw(batch, "Player one Score: " + scorePlayer1, 10, Gdx.graphics.getHeight() - 10);
