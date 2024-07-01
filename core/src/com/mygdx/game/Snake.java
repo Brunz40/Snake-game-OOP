@@ -1,11 +1,11 @@
 package com.mygdx.game;
-
+//imports from gdx
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-
+//imports from otgher utilities
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -14,16 +14,15 @@ import java.util.List;
 public class Snake {
     //snake characteristics
     protected int size;
-    protected float width;
+    protected float cellSize;
     //movement related
     protected float baseSpeed;
     protected float currentSpeed;
-    protected List<Rectangle> bodysegments;
+    protected List<Rectangle> bodySegments;
     protected List<Character> pointingDirection;
     public boolean alive;
-
     /**
-     * metod responsible for creating the snake
+     * method responsible for creating the snake
      * @param x initial x coordinate
      * @param y initial y coordinate
      * @param speed initial speed
@@ -31,13 +30,13 @@ public class Snake {
      */
     public Snake(float x, float y, float speed, float cellsize) {
         this.size = 1;
-        this.width = cellsize;
+        this.cellSize = cellsize;
         this.baseSpeed = speed;
         this.currentSpeed = baseSpeed;
-        this.bodysegments = new ArrayList<>();
+        this.bodySegments = new ArrayList<>();
         this.pointingDirection = new ArrayList<>();
         this.alive = true;
-        this.bodysegments.add(new Rectangle(x, y, width, width));
+        this.bodySegments.add(new Rectangle(x*cellsize, y*cellsize, cellSize, cellSize));
         this.pointingDirection.add('u');
     }
     /**
@@ -69,19 +68,10 @@ public class Snake {
     public void update() {
         if (!alive)
             return;
-        float deltaSpeed = Gdx.graphics.getDeltaTime() * currentSpeed;
+        float deltaSpeed = cellSize*Gdx.graphics.getDeltaTime() * currentSpeed;
         handleInput();
-
-        // Guardar as posições atuais
-        float[] prevX = new float[bodysegments.size()];
-        float[] prevY = new float[bodysegments.size()];
-        for (int i = 0; i < bodysegments.size(); i++) {
-            prevX[i] = bodysegments.get(i).x;
-            prevY[i] = bodysegments.get(i).y;
-        }
-
         // Atualizar a posição da cabeça
-        Rectangle head = bodysegments.get(0);
+        Rectangle head = bodySegments.get(0);
         switch (pointingDirection.get(0)) {
             case 'u':
                 head.setY(head.y + deltaSpeed);
@@ -110,8 +100,8 @@ public class Snake {
         }
 
         // Atualizar as posições das outras partes do corpo
-        for (int i = 1; i < bodysegments.size(); i++) {
-            bodysegments.get(i).setPosition(prevX[i - 1], prevY[i - 1]);
+        for (int i = bodySegments.size() - 1; i > 0; i--) {
+            bodySegments.get(i).setPosition(bodySegments.get(i - 1).x, bodySegments.get(i - 1).y);
             pointingDirection.set(i, pointingDirection.get(i - 1));
         }
     }
@@ -126,7 +116,7 @@ public class Snake {
 
         renderer.setColor(Color.GREEN);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
-        for (Rectangle bodysegment : bodysegments) {
+        for (Rectangle bodysegment : bodySegments) {
             renderer.rect(bodysegment.x, bodysegment.y, bodysegment.width,
                     bodysegment.height);
         }
@@ -136,38 +126,35 @@ public class Snake {
      * @return the list containing the snakes body segments
      */
     public List<Rectangle> getBodySegments() {
-        return bodysegments;
+        return bodySegments;
     }
     /**
      * method responsible for adding new body segments to the snake,
      * asserting they are at the end of the body and point to the right direction
      */
     public void grow() {
-        Rectangle lastSegment = bodysegments.get(bodysegments.size() - 1);
+        Rectangle lastSegment = bodySegments.get(bodySegments.size() - 1);
         char direction = pointingDirection.get(pointingDirection.size() - 1);
         float newX = lastSegment.x;
         float newY = lastSegment.y;
-
-        //
         int GROWTH_DISTANCE = 60;
         switch (direction) {
             case 'u':
-                newY -= (width + GROWTH_DISTANCE);
+                newY -= (cellSize + GROWTH_DISTANCE);
                 break;
             case 'd':
-                newY += (width + GROWTH_DISTANCE);
+                newY += (cellSize + GROWTH_DISTANCE);
                 break;
             case 'l':
-                newX += (width + GROWTH_DISTANCE);
+                newX += (cellSize + GROWTH_DISTANCE);
                 break;
             case 'r':
-                newX -= (width + GROWTH_DISTANCE);
+                newX -= (cellSize + GROWTH_DISTANCE);
                 break;
         }
-        bodysegments.add(new Rectangle(newX, newY, width, width));
+        bodySegments.add(new Rectangle(newX, newY, cellSize, cellSize));
         pointingDirection.add(direction);
     }
-
     /**
      * method responsible for changing the snake speed
      * @param increment amount per wich the speed will change
@@ -177,7 +164,7 @@ public class Snake {
     }
 
     public boolean checkHeadCollisionWithOtherSnake(Snake other) {
-        Rectangle head = bodysegments.get(0);
+        Rectangle head = bodySegments.get(0);
         for (int i = 1; i < other.getBodySegments().size(); i++) {
             if (head.overlaps(other.getBodySegments().get(i))) {
                 return true;
