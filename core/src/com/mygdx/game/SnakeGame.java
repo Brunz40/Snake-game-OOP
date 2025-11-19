@@ -70,9 +70,6 @@ public class SnakeGame extends ApplicationAdapter {
      * Called to update the game state, players score and position
      */
     public void update(){
-        if (gameOver) {
-            return;
-        }
         //updating elapsed time
         float deltaTime = Gdx.graphics.getDeltaTime();
         timeElapsed += deltaTime;
@@ -130,9 +127,6 @@ public class SnakeGame extends ApplicationAdapter {
      */
     @Override
     public void render() {
-        if (gameOver) {
-            return;
-        }
         update();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
