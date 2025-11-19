@@ -14,21 +14,18 @@ public class SnakePlayerTwo extends Snake {
     }
 
     public void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
-            if (!pointingDirection.get(0).equals('r'))
-                pointingDirection.set(0, 'l');
+        char currentDirection=pointingDirection.get(0);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A)&&currentDirection!='r') {
+            pointingDirection.set(0, 'l');
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-            if (!pointingDirection.get(0).equals('l'))
-                pointingDirection.set(0, 'r');
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D)&&currentDirection!='l') {
+            pointingDirection.set(0, 'r');
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            if (!pointingDirection.get(0).equals('d'))
-                pointingDirection.set(0, 'u');
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)&&currentDirection!='d') {
+            pointingDirection.set(0, 'u');
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-            if (!pointingDirection.get(0).equals('u'))
-                pointingDirection.set(0, 'd');
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)&&currentDirection!='u') {
+            pointingDirection.set(0, 'd');
         }
     }
 
