@@ -44,21 +44,18 @@ public class Snake {
      * and changing the head pointing direction accordingly
      */
     public void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
-            if (!pointingDirection.get(0).equals('r'))
-                pointingDirection.set(0, 'l');
+        char currentDirection=pointingDirection.get(0);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)&&currentDirection!='r') {
+            pointingDirection.set(0, 'l');
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
-            if (!pointingDirection.get(0).equals('l'))
+        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)&&currentDirection!='l') {
                 pointingDirection.set(0, 'r');
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            if (!pointingDirection.get(0).equals('d'))
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)&&currentDirection!='d') {
                 pointingDirection.set(0, 'u');
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            if (!pointingDirection.get(0).equals('u'))
-                pointingDirection.set(0, 'd');
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)&&currentDirection!='u') {
+            pointingDirection.set(0, 'd');
         }
     }
     /**
