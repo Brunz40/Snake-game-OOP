@@ -39,12 +39,12 @@ public class Fruit {
      * @return will return True whenever the snake body is touching the fruit
      */
     public boolean isEaten(Snake snake) {
-        for (Rectangle segment : snake.getBodySegments()) {
+        Rectangle segment = snake.getBodySegments().get(0);
             if (circleIntersectsRectangle(fruit, segment)) {
                 eatSound.play();
                 return true;
             }
-        }
+
         return false;
     }
     /**
